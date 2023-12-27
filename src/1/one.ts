@@ -35,4 +35,4 @@ export const partOne = (lines: string[]) => {
   return sum(sums);
 };
 
-console.log(`Part 1: ${partOne(lines)}`);
+console.log(`Result: ${partOne(lines)}`);

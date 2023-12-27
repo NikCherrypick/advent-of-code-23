@@ -46,4 +46,4 @@ export const partOne = (lines: string[]) => {
   return validGames.reduce((prev, curr) => prev + curr);
 };
 
-console.log(`Part 1: ${partOne(lines)}`);
+console.log(`Result: ${partOne(lines)}`);

@@ -1,10 +1,20 @@
-const symbols = ["*", "$", "#", "+", "/"];
+export const readFile = (path: string = "/input.txt"): string[] => {
+  const data = fs.readFileSync(__dirname + path, "utf8");
 
-const hasTrailing = (startIndex: number, endIndex: number, line: string) => {
+  return data.split("\r\n");
+};
+
+const lines = readFile();
+
+const hasSymbolAdjacent = (
+  startIndex: number,
+  endIndex: number,
+  line: string
+) => {
   let hasPrefix = false;
   let hasSuffix = false;
   let hasInRange = false;
-  console.log(line[endIndex + 1]);
+
   if (startIndex - 1 >= 0) {
     hasPrefix =
       isNaN(parseInt(line[startIndex - 1])) && line[startIndex - 1] !== ".";
@@ -26,30 +36,39 @@ const hasTrailing = (startIndex: number, endIndex: number, line: string) => {
 let lineIndex = 0;
 let validNums: number[] = [];
 for (const line of lines) {
-  const numbersOfLine: any[] = [...line.matchAll(/\d+/g)];
-  numbersOfLine;
+  const numbersOfLine = [...line.matchAll(/\d+/g)];
   if (!numbersOfLine?.length) {
     lineIndex++;
     continue;
   }
   for (const regexRes of numbersOfLine) {
     const number = regexRes[0];
-    let numberStartIndex = regexRes.index;
+    let numberStartIndex = regexRes.index!;
 
     const numberEndIndex = numberStartIndex + number?.toString().length - 1;
 
-    numbersOfLine;
-    console.log(line);
-    const hasAdjacent = hasTrailing(numberStartIndex, numberEndIndex, line);
+    const hasAdjacent = hasSymbolAdjacent(
+      numberStartIndex,
+      numberEndIndex,
+      line
+    );
 
     const hasAdjacentInPrevious =
       lineIndex >= 1
-        ? hasTrailing(numberStartIndex, numberEndIndex, line[lineIndex - 1])
+        ? hasSymbolAdjacent(
+            numberStartIndex,
+            numberEndIndex,
+            line[lineIndex - 1]
+          )
         : false;
 
     const hasAdjacentInNext =
       lineIndex + 1 < line.length
-        ? hasTrailing(numberStartIndex, numberEndIndex, line[lineIndex + 1])
+        ? hasSymbolAdjacent(
+            numberStartIndex,
+            numberEndIndex,
+            line[lineIndex + 1]
+          )
         : false;
 
     if (hasAdjacent || hasAdjacentInNext || hasAdjacentInPrevious) {
@@ -60,4 +79,4 @@ for (const line of lines) {
   lineIndex++;
 }
 const result = validNums.reduce((prev, curr) => prev + curr);
-console.log(result);
+console.log(`Result: ${result}`);
